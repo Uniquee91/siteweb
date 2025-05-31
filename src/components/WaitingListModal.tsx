@@ -146,7 +146,7 @@ const WaitingListModal: React.FC<WaitingListModalProps> = ({
             className="w-full py-3 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
             disabled={loading}
           >
-            {loading ? "Submitting..." : button}
+            {loading ? "..." : button}
           </button>
           <p className="text-sm text-gray-500 text-center">{disclaimer}</p>
         </form>
