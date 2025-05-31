@@ -58,12 +58,12 @@ export default async function handler(req, res) {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.RESEND_KEY}`,
+        Authorization: `Bearer re_W1EB9XK4_9SeXPKPvENHDrLjvfu8gipou`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "noreply@unique@uniqueeu.com",
-        to: "alt.j7-0w82pgx@yopmail.com",
+        from: "noreply@unique4world.com",
+        to: " unique@uniqueeu.com",
         subject: title,
         html,
       }),
