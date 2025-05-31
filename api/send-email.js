@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: "noreply@unique4world.com",
-        to: " unique@uniqueeu.com",
+        to: "unique@uniqueeu.com",
         subject: title,
         html,
       }),
