@@ -58,7 +58,7 @@ export default async function handler(req, res) {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_RESEND_KEY}`,
+        Authorization: `Bearer re_W1EB9XK4_9SeXPKPvENHDrLjvfu8gipou`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
