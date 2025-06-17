@@ -28,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({
       experiencesEvents: "Experiência & Events",
       upcomingEvents: "Outro evento em preparação",
       blog: "Blog",
-      requestRetreat: "Solicitar um retiro",
+      requestRetreat: "Solicite um retiro",
     },
     Français: {
       retreats: "Retraites",

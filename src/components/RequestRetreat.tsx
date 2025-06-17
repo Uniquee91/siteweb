@@ -88,12 +88,12 @@ const RequestRetreat: React.FC<RequestRetreatProps> = ({
   const content = {
     Português: {
       hero: {
-        title: "Solicitar um retiro",
+        title: "Solicite um retiro",
         subtitle: "Crie uma experiência única adaptada às suas necessidades",
       },
-      title: "Um retiro sob medida para você",
+      title: "Um retiro feito à sua medida",
       description:
-        "Seja você deseja organizar um retiro para si mesmo, sua família, seus amigos ou sua empresa, nossa equipe de especialistas o acompanha na criação de uma experiência que atende perfeitamente às suas expectativas.",
+        "Quer pretenda organizar um retiro para si, para a sua família, amigos ou empresa, a nossa equipa de especialistas acompanha-o na criação de uma experiência que corresponde inteiramente às suas expectativas.",
       features: [
         {
           icon: Shield,
@@ -105,13 +105,13 @@ const RequestRetreat: React.FC<RequestRetreatProps> = ({
           icon: Scale,
           title: "Acompanhamento especializado",
           description:
-            "Nossa equipe o guia em cada etapa, desde a concepção inicial até a realização do seu retiro, para uma experiência sem preocupações.",
+            "A nossa equipa orienta-o em todas as fases, desde a concepção inicial até à concretização do seu retiro, garantindo uma experiência sem preocupações.",
         },
         {
           icon: MapPin,
-          title: "Locais excepcionais",
+          title: "Locais de excelência",
           description:
-            "Acesse nossa rede de locais excepcionais, em Portugal e no exterior, para criar o ambiente perfeito para seu retiro.",
+            "Tire partido da nossa rede de locais excepcionais, em Portugal e no estrangeiro, para criar o ambiente ideal para o seu retiro.",
         },
         {
           icon: Coins,
@@ -125,37 +125,37 @@ const RequestRetreat: React.FC<RequestRetreatProps> = ({
         author: `${quotes[key].author}`,
       },
       contact: {
-        title: "Contate-nos diretamente",
+        title: "Contacte-nos diretamente",
         description:
-          "Prefere discutir seu projeto por telefone ou e-mail? Entre em contato diretamente:",
+          "Prefere discutir o seu projeto por telefone ou email? Contacte-nos diretamente:",
         phone: phone,
         email: email,
       },
       form: {
-        title: "Formulário de solicitação",
+        title: "Formulário de pedido",
         firstName: "Nome *",
-        lastName: "Sobrenome *",
+        lastName: "Apelido *",
         email: "Email *",
         phone: "Telefone",
         retreatType: "Tipo de retiro *",
         participants: "Número de participantes",
         duration: "Duração desejada",
-        location: "Preferência de local",
-        interests: "Áreas de interesse (múltipla escolha)",
-        project: "Seu projeto de retiro *",
+        location: "Local de preferência",
+        interests: "Áreas de interesse (pode escolher várias opções)",
+        project: "Descreva o seu projeto de retiro *",
         projectPlaceholder:
           "Descreva suas expectativas, necessidades específicas e qualquer outra informação relevante para seu projeto...",
         consent:
-          "Aceito que minhas informações sejam utilizadas para ser contatado no âmbito da minha solicitação de retiro. *",
-        submit: "Enviar minha solicitação",
+          "Aceito que os meus dados sejam utilizados para ser contactado no âmbito do meu pedido de retiro. *",
+        submit: "Enviar o meu pedido",
         required: "* Campos obrigatórios",
       },
       interestOptions: [
         { label: "Yoga", value: "yoga" },
         { label: "Mindfulness", value: "mindfulness" },
         { label: "Meditação", value: "meditation" },
-        { label: "Caminhada", value: "hiking" },
-        { label: "Nutrição consciente", value: "nutrition" },
+        { label: "Caminhadas", value: "hiking" },
+        { label: "Alimentação consciente", value: "nutrition" },
         { label: "Arteterapia", value: "artTherapy" },
         { label: "Desenvolvimento pessoal", value: "personal" },
         { label: "Team building", value: "teamBuilding" },
@@ -164,25 +164,24 @@ const RequestRetreat: React.FC<RequestRetreatProps> = ({
         title: "Perguntas frequentes",
         questions: [
           {
-            question:
-              "Com quanto tempo de antecedência devo fazer minha solicitação?",
+            question: "Com que antecedência devo fazer o meu pedido?",
             answer:
-              "Recomendamos entrar em contato com pelo menos 2 meses de antecedência para retiros personalizados, especialmente se você tiver datas específicas em mente. Para retiros corporativos ou grandes grupos, um prazo de 3 a 6 meses é preferível.",
+              "Recomendamos que entre em contacto com, pelo menos, 2 meses de antecedência para retiros personalizados, especialmente se tiver datas específicas em mente. Para retiros corporativos ou grupos grandes, o ideal é um prazo de 3 a 6 meses.",
           },
           {
             question: "Qual é o orçamento mínimo para um retiro personalizado?",
             answer:
-              "O custo varia consideravelmente dependendo de suas necessidades, duração, local e número de participantes. Trabalhamos com todos os orçamentos e podemos propor opções adaptadas às suas restrições financeiras. Entre em contato para um orçamento personalizado.",
+              "O custo varia significativamente conforme as suas necessidades, duração, local e número de participantes. Trabalhamos com todos os orçamentos e podemos propor soluções adaptadas às suas restrições financeiras. Contacte-nos para um orçamento personalizado.",
           },
           {
-            question: "Vocês podem organizar um retiro no exterior?",
+            question: "Organizam retiros no estrangeiro?",
             answer:
-              "Absolutamente! Organizamos retiros em todo o mundo. Nossa equipe possui experiência em muitos destinos e pode gerenciar todos os aspectos logísticos para oferecer uma experiência sem preocupações.",
+              "Sim, organizamos retiros em todo o mundo. A nossa equipa tem experiência em diversos destinos e pode gerir todos os aspetos logísticos, proporcionando-lhe uma experiência sem preocupações.",
           },
           {
-            question: "O que acontece após o envio da minha solicitação?",
+            question: "O que acontece depois de enviar o meu pedido?",
             answer:
-              "Após receber sua solicitação, Luis entrará em contato em 48 horas para discutir seu projeto em detalhes. Em seguida, organizaremos uma chamada ou reunião para aprofundar suas necessidades e começar a elaborar uma proposta sob medida.",
+              "Após a receção do seu pedido, o Luís entrará em contacto consigo num prazo de 48 horas para discutir o projeto em detalhe. Depois, será agendada uma chamada ou reunião para aprofundar as suas necessidades e começar a desenvolver uma proposta personalizada.",
           },
         ],
       },
