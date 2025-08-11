@@ -4,9 +4,13 @@ import { Link } from "react-router-dom";
 interface WelcomeProps {
   language: string;
   imgUrl: string;
+  welcomeData?: {
+    mainTitle?: { fr: string; en: string; pt: string; };
+    mainContent?: { fr: string; en: string; pt: string; };
+  };
 }
 
-const Welcome: React.FC<WelcomeProps> = ({ language, imgUrl }) => {
+const Welcome: React.FC<WelcomeProps> = ({ language, imgUrl, welcomeData }) => {
   const content = {
     Português: {
       welcome: "Bem-vindo ao UNIQUE4WORLD",
@@ -37,8 +41,40 @@ const Welcome: React.FC<WelcomeProps> = ({ language, imgUrl }) => {
     },
   };
 
-  const { welcome, title, description1, description2, button } =
-    content[language as keyof typeof content] || content["English"];
+  // Récupérer les données Sanity si disponibles
+  const sanityTitle = welcomeData?.mainTitle;
+  const sanityContent = welcomeData?.mainContent;
+  
+  let finalTitle, finalDescription1, finalDescription2;
+  
+  if (sanityTitle && sanityContent) {
+    // Utiliser les données Sanity
+    switch (language) {
+      case 'Français':
+        finalTitle = sanityTitle.fr;
+        finalDescription1 = sanityContent.fr;
+        finalDescription2 = null; // Pas de duplication
+        break;
+      case 'English':
+        finalTitle = sanityTitle.en;
+        finalDescription1 = sanityContent.en;
+        finalDescription2 = null;
+        break;
+      default:
+        finalTitle = sanityTitle.pt;
+        finalDescription1 = sanityContent.pt;
+        finalDescription2 = null;
+        break;
+    }
+  } else {
+    // Fallback vers le contenu statique
+    const staticContent = content[language as keyof typeof content] || content["English"];
+    finalTitle = staticContent.title;
+    finalDescription1 = staticContent.description1;
+    finalDescription2 = staticContent.description2;
+  }
+
+  const { welcome, button } = content[language as keyof typeof content] || content["English"];
 
   return (
     <section className="py-24 px-4 max-w-7xl mx-auto">
@@ -46,11 +82,13 @@ const Welcome: React.FC<WelcomeProps> = ({ language, imgUrl }) => {
         <div className="space-y-6">
           <span className="text-amber-600 font-medium">{welcome}</span>
           <h2 className="text-4xl font-serif font-light leading-tight">
-            {title}
+            {finalTitle}
           </h2>
           <div className="space-y-4 text-gray-600">
-            <p>{description1}</p>
-            <p>{description2}</p>
+            <p dangerouslySetInnerHTML={{ __html: finalDescription1?.replace(/\n/g, '<br />') || '' }} />
+            {finalDescription2 && (
+              <p dangerouslySetInnerHTML={{ __html: finalDescription2.replace(/\n/g, '<br />') }} />
+            )}
           </div>
           <Link
             to="/retreats"

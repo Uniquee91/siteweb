@@ -3,24 +3,75 @@ import { useScrollToTop } from "../hooks/useScrollToTop";
 import { Clock, MapPin, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import imgSrc from "../images/img1.jpg";
+import { useFetch } from "../hooks/useFetch";
+import { nosRetraitesQuery } from "../utils/sanityQueries";
 interface RetreatsProps {
   language: string;
 }
 
 const Retreats: React.FC<RetreatsProps> = ({ language }) => {
   useScrollToTop();
+  
+  const { data: sanityData } = useFetch(nosRetraitesQuery);
+
+  const getSanityTitle = () => {
+    if (sanityData?.banniere?.titre) {
+      switch (language) {
+        case 'Français': return sanityData.banniere.titre.fr;
+        case 'English': return sanityData.banniere.titre.en;
+        case 'Português': default: return sanityData.banniere.titre.pt;
+      }
+    }
+    return '';
+  };
+
+  const getSanitySubtitle = () => {
+    if (sanityData?.banniere?.sousTitre) {
+      switch (language) {
+        case 'Français': return sanityData.banniere.sousTitre.fr;
+        case 'English': return sanityData.banniere.sousTitre.en;
+        case 'Português': default: return sanityData.banniere.sousTitre.pt;
+      }
+    }
+    return '';
+  };
+
+  const getSanityIntroTitle = () => {
+    if (sanityData?.introduction?.titre) {
+      switch (language) {
+        case 'Français': return sanityData.introduction.titre.fr;
+        case 'English': return sanityData.introduction.titre.en;
+        case 'Português': default: return sanityData.introduction.titre.pt;
+      }
+    }
+    return '';
+  };
+
+  const getSanityIntroDescription = () => {
+    if (sanityData?.introduction?.description) {
+      switch (language) {
+        case 'Français': return sanityData.introduction.description.fr;
+        case 'English': return sanityData.introduction.description.en;
+        case 'Português': default: return sanityData.introduction.description.pt;
+      }
+    }
+    return '';
+  };
+
+  const sanityTitle = getSanityTitle();
+  const sanitySubtitle = getSanitySubtitle();
+  const sanityIntroTitle = getSanityIntroTitle();
+  const sanityIntroDescription = getSanityIntroDescription();
 
   const content = {
     Português: {
       hero: {
-        title: "Nossos Retiros",
-        subtitle:
-          "Explore nossa gama de retiros e experiências projetadas para seu bem-estar",
+        title: sanityTitle || "Nossos Retiros",
+        subtitle: sanitySubtitle || "Explore nossa gama de retiros e experiências projetadas para seu bem-estar",
       },
       intro: {
-        title: "Encontre o retiro perfeito para você",
-        description:
-          "Seja você está procurando um simples dia de relaxamento, um retiro de vários dias ou uma experiência única do outro lado do mundo, temos a opção ideal para você.",
+        title: sanityIntroTitle || "Encontre o retiro perfeito para você",
+        description: sanityIntroDescription || "Seja você está procurando um simples dia de relaxamento, um retiro de vários dias ou uma experiência única do outro lado do mundo, temos a opção ideal para você.",
       },
       oneDayRetreats: {
         title: "Experiência de um dia",
@@ -105,14 +156,12 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
     },
     Français: {
       hero: {
-        title: "Nos Retraites",
-        subtitle:
-          "Explorez notre gamme de retraites et d'expériences conçues pour votre bien-être",
+        title: sanityTitle || "Nos Retraites",
+        subtitle: sanitySubtitle || "Explorez notre gamme de retraites et d'expériences conçues pour votre bien-être",
       },
       intro: {
-        title: "Trouvez la retraite parfaite pour vous",
-        description:
-          "Que vous recherchiez une simple journée de détente, une retraite de plusieurs jours ou une expérience unique à l'autre bout du monde, nous avons l'option idéale pour vous.",
+        title: sanityIntroTitle || "Trouvez la retraite parfaite pour vous",
+        description: sanityIntroDescription || "Que vous recherchiez une simple journée de détente, une retraite de plusieurs jours ou une expérience unique à l'autre bout du monde, nous avons l'option idéale pour vous.",
       },
       oneDayRetreats: {
         title: "Expérience d'une journée",
@@ -197,14 +246,12 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
     },
     English: {
       hero: {
-        title: "Our Retreats",
-        subtitle:
-          "Explore our range of retreats and experiences designed for your well-being",
+        title: sanityTitle || "Our Retreats",
+        subtitle: sanitySubtitle || "Explore our range of retreats and experiences designed for your well-being",
       },
       intro: {
-        title: "Find the perfect retreat for you",
-        description:
-          "Whether you're looking for a simple day of relaxation, a multi-day retreat, or a unique experience on the other side of the world, we have the ideal option for you.",
+        title: sanityIntroTitle || "Find the perfect retreat for you",
+        description: sanityIntroDescription || "Whether you're looking for a simple day of relaxation, a multi-day retreat, or a unique experience on the other side of the world, we have the ideal option for you.",
       },
       oneDayRetreats: {
         title: "One-day Experience",

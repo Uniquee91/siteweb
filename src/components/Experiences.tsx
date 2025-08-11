@@ -1,17 +1,65 @@
 import React from 'react';
 import { MapPin, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useFetch } from '../hooks/useFetch';
+import { homePageQuery } from '../utils/sanityQueries';
 
 interface ExperiencesProps {
   language: string;
 }
 
 const Experiences: React.FC<ExperiencesProps> = ({ language }) => {
+  const { data: homeData } = useFetch(homePageQuery);
+  const typedHomeData = homeData as any; // Type assertion for safety
+  const nosOffres = typedHomeData?.nosOffres;
+  const header = nosOffres;
+  const offre1 = nosOffres?.offre1;
+  const offre2 = nosOffres?.offre2;
+  const offre3 = nosOffres?.offre3;
+  const offre4 = nosOffres?.offre4;
+  const offers = [offre1, offre2, offre3, offre4].filter(Boolean);
+
+  const getContent = (field: string) => {
+    if (header && header[field]) {
+      switch (language) {
+        case 'Français': return header[field].fr;
+        case 'English': return header[field].en;
+        case 'Português': default: return header[field].pt;
+      }
+    }
+    return '';
+  };
+
+  const getOfferContent = (offer: any, field: string) => {
+    if (offer && offer[field]) {
+      switch (language) {
+        case 'Français': return offer[field].fr;
+        case 'English': return offer[field].en;
+        case 'Português': default: return offer[field].pt;
+      }
+    }
+    return '';
+  };
+
+  const getOfferLink = (index: number) => {
+    switch (index) {
+      case 0: return '/one-day-retreats';
+      case 1: return '/wellness-retreats';
+      case 2: return '/experiences-events';
+      case 3: return '/wellness-retreats'; // Corrected for Offre 4
+      default: return '/retreats';
+    }
+  };
+
+  const sanitySubtitle = getContent('sousTitre');
+  const sanityTitle = getContent('titre');
+  const sanityDescription = getContent('description');
+
   const content = {
     'Português': {
-      subtitle: 'Nossas ofertas',
-      title: 'Experiências para todas as necessidades',
-      description: 'Explore nossa gama de retiros e experiências projetadas para atender a todas as necessidades, seja você tem um dia ou uma semana, em Portugal ou no exterior.',
+      subtitle: sanitySubtitle || 'Nossas ofertas',
+      title: sanityTitle || 'Experiências para todas as necessidades',
+      description: sanityDescription || 'Explore nossa gama de retiros e experiências projetadas para atender a todas as necessidades, seja você tem um dia ou uma semaine, em Portugal ou no exterior.',
       learnMore: 'En savoir plus',
       experiences: [
         {
@@ -49,9 +97,9 @@ const Experiences: React.FC<ExperiencesProps> = ({ language }) => {
       ]
     },
     'Français': {
-      subtitle: 'Nos offres',
-      title: 'Des expériences pour tous les besoins',
-      description: 'Explorez notre gamme de retraites et d\'expériences conçues pour répondre à tous les besoins, que vous ayez une journée ou une semaine, au Portugal ou à l\'étranger.',
+      subtitle: sanitySubtitle || 'Nos offres',
+      title: sanityTitle || 'Des expériences pour tous les besoins',
+      description: sanityDescription || 'Explorez notre gamme de retraites et d\'expériences conçues pour répondre à tous les besoins, que vous ayez une journée ou une semaine, au Portugal ou à l\'étranger.',
       learnMore: 'En savoir plus',
       experiences: [
         {
@@ -89,9 +137,9 @@ const Experiences: React.FC<ExperiencesProps> = ({ language }) => {
       ]
     },
     'English': {
-      subtitle: 'Our offerings',
-      title: 'Experiences for every need',
-      description: 'Explore our range of retreats and experiences designed to meet all needs, whether you have a day or a week, in Portugal or abroad.',
+      subtitle: sanitySubtitle || 'Our offerings',
+      title: sanityTitle || 'Experiences for every need',
+      description: sanityDescription || 'Explore our range of retreats and experiences designed to meet all needs, whether you have a day or a week, in Portugal or abroad.',
       learnMore: 'Learn more',
       experiences: [
         {
@@ -142,27 +190,27 @@ const Experiences: React.FC<ExperiencesProps> = ({ language }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {experiences.map((experience, index) => (
+          {offers.map((offer: any, index: number) => (
             <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
               <div className="aspect-w-3 aspect-h-2">
                 <img
-                  src={experience.image}
-                  alt={experience.title}
+                  src={offer.image ? `https://cdn.sanity.io/images/${import.meta.env.VITE_SANITY_PROJECT_ID}/${import.meta.env.VITE_SANITY_DATASET}/${offer.image.asset._ref.replace('image-', '').replace('-jpg', '.jpg').replace('-png', '.png')}` : 'https://images.pexels.com/photos/15286/pexels-photo.jpg'}
+                  alt={getOfferContent(offer, 'titre')}
                   className="w-full h-48 object-cover"
                 />
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                  <span>{experience.duration}</span>
+                  <span>{getOfferContent(offer, 'duree')}</span>
                   <div className="flex items-center">
                     <MapPin className="h-4 w-4 mr-1" />
-                    <span>{experience.location}</span>
+                    <span>{getOfferContent(offer, 'lieu')}</span>
                   </div>
                 </div>
-                <h3 className="text-xl font-serif mb-3">{experience.title}</h3>
-                <p className="text-gray-600 text-sm mb-4">{experience.description}</p>
+                <h3 className="text-xl font-serif mb-3">{getOfferContent(offer, 'titre')}</h3>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed">{getOfferContent(offer, 'description')}</p>
                 <Link
-                  to={experience.link}
+                  to={getOfferLink(index)}
                   className="inline-flex items-center text-amber-600 hover:text-amber-700 transition-colors"
                 >
                   {learnMore}

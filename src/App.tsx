@@ -20,9 +20,11 @@ import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import CookieBanner from "./components/CookieBanner";
 import Retreats from "./components/Retreats";
+import NosRetraites from "./components/NosRetraites";
 import NewsletterModal from "./components/NewsletterModal";
 import { useScrollToTop } from "./hooks/useScrollToTop";
 import { useFetch } from "./hooks/useFetch";
+import { homePageQuery } from "./utils/sanityQueries";
 import "./index.css";
 import Loader from "./components/Loader";
 import { ToastContainer } from "react-toastify";
@@ -35,29 +37,36 @@ const Studio = () => {
   return <Loader />;
 };
 
-const homepageQuery = `*[_type == "homePage"][0]`;
 const contactDetailsQuery = `*[_type == "contact"][0]`;
 
 const HomePage: React.FC<{ language: string }> = ({ language }) => {
   useScrollToTop();
 
-  const { data, isLoading, error } = useFetch(homepageQuery);
+  const { data, isLoading, error } = useFetch(homePageQuery);
+  const typedData = data as any; // Type assertion for safety
 
   if (isLoading) return <Loader />;
   if (error) return <div>Error</div>;
 
   return (
     <>
-      <Hero language={language} imgUrl={data.heroImg} />
-      <Welcome language={language} imgUrl={data.welcomeSectionImg} />
+      <Hero language={language} imgUrl={typedData?.heroImg} />
+      <Welcome 
+        language={language} 
+        imgUrl={typedData?.welcomeSectionImg || "https://images.pexels.com/photos/15286/pexels-photo.jpg"} 
+        welcomeData={{
+          mainTitle: typedData?.mainTitle,
+          mainContent: typedData?.mainContent
+        }}
+      />
       <Experiences language={language} />
       <Testimonials
         language={language}
-        testimonialsFR={data?.testimonialsFR}
-        testimonialsEN={data?.testimonialsEN}
-        testimonialsPT={data?.testimonialsPT}
+        testimonialsFR={typedData?.testimonialsFR || []}
+        testimonialsEN={typedData?.testimonialsEN || []}
+        testimonialsPT={typedData?.testimonialsPT || []}
       />
-      <CreateRetreat language={language} imgUrl={data.ctaSectionImg} />
+      <CreateRetreat language={language} imgUrl={typedData?.ctaSectionImg} />
       <Blog language={language} />
       <Newsletter language={language} />
     </>
@@ -71,6 +80,7 @@ const App: React.FC = () => {
     isLoading,
     error,
   } = useFetch(contactDetailsQuery);
+  const typedContactDetails = contactDetails as any; // Type assertion for safety
 
   if (isLoading) return <Loader />;
   if (error) return <div>Error</div>;
@@ -81,11 +91,12 @@ const App: React.FC = () => {
         <Navbar
           currentLanguage={language}
           onLanguageChange={setLanguage}
-          insta={contactDetails?.insta}
+          insta={typedContactDetails?.insta}
         />
         <Routes>
           <Route path="/" element={<HomePage language={language} />} />
           <Route path="/retreats" element={<Retreats language={language} />} />
+          <Route path="/nos-retraites" element={<NosRetraites language={language} />} />
           <Route path="/studio" element={<Studio />} />
           <Route
             path="/one-day-retreats"
@@ -114,9 +125,9 @@ const App: React.FC = () => {
             element={
               <RequestRetreat
                 language={language}
-                email={contactDetails?.email}
-                phone={contactDetails?.phone}
-                quotes={contactDetails?.testimonial}
+                email={typedContactDetails?.email}
+                phone={typedContactDetails?.phone}
+                quotes={typedContactDetails?.testimonial}
               />
             }
           />
@@ -131,9 +142,9 @@ const App: React.FC = () => {
         </Routes>
         <Footer
           language={language}
-          email={contactDetails?.email}
-          phone={contactDetails?.phone}
-          insta={contactDetails?.insta}
+          email={typedContactDetails?.email}
+          phone={typedContactDetails?.phone}
+          insta={typedContactDetails?.insta}
         />
         <CookieBanner language={language} />
         <NewsletterModal language={language} />
