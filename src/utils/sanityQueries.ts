@@ -133,7 +133,7 @@ export const homePageQuery = `
   }
 `;
 
-// Requête pour la page Nos Retraites
+// Requête pour la page Nos Retraites - VERSION AVEC SECTIONS SÉPARÉES
 export const nosRetraitesQuery = `
   *[_type == "nosRetraites"][0] {
     _id,
@@ -161,9 +161,145 @@ export const nosRetraitesQuery = `
         en,
         pt
       }
+    },
+    // CORRIGÉ : Utiliser les VRAIS noms des champs du schéma Sanity
+    "experienceUneJournee": sectionJournee {
+      image,
+      titre {
+        fr,
+        en,
+        pt
+      },
+      description {
+        fr,
+        en,
+        pt
+      },
+      retraites[] {
+        titre {
+          fr,
+          en,
+          pt
+        },
+        duree {
+          fr,
+          en,
+          pt
+        },
+        lieu {
+          fr,
+          en,
+          pt
+        }
+      }
+    },
+    "retraiteBienEtre": sectionBienEtre {
+      image,
+      titre {
+        fr,
+        en,
+        pt
+      },
+      description {
+        fr,
+        en,
+        pt
+      },
+      retraites[] {
+        titre {
+          fr,
+          en,
+          pt
+        },
+        duree {
+          fr,
+          en,
+          pt
+        },
+        lieu {
+          fr,
+          en,
+          pt
+        }
+      }
+    },
+    "experienceEvents": sectionExperiences {
+      image,
+      titre {
+        fr,
+        en,
+        pt
+      },
+      description {
+        fr,
+        en,
+        pt
+      },
+      retraites[] {
+        titre {
+          fr,
+          en,
+          pt
+        },
+        duree {
+          fr,
+          en,
+          pt
+        },
+        lieu {
+          fr,
+          en,
+          pt
+        }
+      }
+    },
+    "autreEvenement": sectionEvenements {
+      image,
+      titre {
+        fr,
+        en,
+        pt
+      },
+      description {
+        fr,
+        en,
+        pt
+      },
+      retraites[] {
+        titre {
+          fr,
+          en,
+          pt
+        },
+        duree {
+          fr,
+          en,
+          pt
+        },
+        lieu {
+          fr,
+          en,
+          pt
+        }
+      }
     }
   }
 `;
+
+// REQUÊTE DE DEBUG : Voir la structure complète du document
+export const nosRetraitesDebugQuery = `
+  *[_type == "nosRetraites"][0] {
+    _id,
+    _type,
+    // Récupérer TOUS les champs pour voir la vraie structure
+    ...,
+    // Récupérer aussi les références
+    "refs": *[_type in ["retraiteUneJournee", "retraiteBienEtre", "experienceEvents", "autreEvenement"]]
+  }
+`;
+
+// Requête pour récupérer les 4 sections séparées
+
 
 // Requêtes existantes
 export const blogPostsQuery = `

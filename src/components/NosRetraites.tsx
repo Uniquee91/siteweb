@@ -2,158 +2,22 @@ import React from 'react';
 import { useFetch } from '../hooks/useFetch';
 import { nosRetraitesQuery } from '../utils/sanityQueries';
 
-interface NosRetraitesProps {
-  language: string;
-}
-
-const NosRetraites: React.FC<NosRetraitesProps> = ({ language }) => {
+const NosRetraites: React.FC = () => {
+  // TEST SIMPLE - Ceci devrait s'afficher immédiatement
+  console.log("🚀 COMPOSANT NOS RETRAITES CHARGÉ !");
+  
   const { data, isLoading, error } = useFetch(nosRetraitesQuery);
 
+  // DEBUG: Ajout de logs pour voir ce qui se passe
   console.log("=== NOS RETRAITES DEBUG ===");
-  console.log("Données reçues:", data);
-  console.log("Langue:", language);
-
-  const typedData = data as any; // Type assertion for safety
-
-  const getTitle = () => {
-    if (typedData?.banniere?.titre) {
-      switch (language) {
-        case 'Français': return typedData.banniere.titre.fr;
-        case 'English': return typedData.banniere.titre.en;
-        case 'Português': default: return typedData.banniere.titre.pt;
-      }
-    }
-    return '';
-  };
-
-  const getSanitySubtitle = () => {
-    if (typedData?.banniere?.sousTitre) {
-      switch (language) {
-        case 'Français': return typedData.banniere.sousTitre.fr;
-        case 'English': return typedData.banniere.sousTitre.en;
-        case 'Português': default: return typedData.banniere.sousTitre.pt;
-      }
-    }
-    return '';
-  };
-
-  const getSanityIntroTitle = () => {
-    if (typedData?.introduction?.titre) {
-      switch (language) {
-        case 'Français': return typedData.introduction.titre.fr;
-        case 'English': return typedData.introduction.titre.en;
-        case 'Português': default: return typedData.introduction.titre.pt;
-      }
-    }
-    return '';
-  };
-
-  const getSanityIntroDescription = () => {
-    if (typedData?.introduction?.description) {
-      switch (language) {
-        case 'Français': return typedData.introduction.description.fr;
-        case 'English': return typedData.introduction.description.en;
-        case 'Português': default: return typedData.introduction.description.pt;
-      }
-    }
-    return '';
-  };
-
-  const title = getTitle();
-  const subtitle = getSanitySubtitle();
-  const introTitle = getSanityIntroTitle();
-  const introDescription = getSanityIntroDescription();
-
-  const content = {
-    Português: {
-      hero: {
-        title: title || "Nossos Retiros",
-        subtitle: subtitle || "Explore nossa gama de retiros e experiências projetadas para seu bem-estar",
-      },
-      intro: {
-        title: introTitle || "Encontre o retiro perfeito para você",
-        description: introDescription || "Seja você está procurando um simples dia de relaxamento, um retiro de vários dias ou uma experiência única do outro lado do mundo, temos a opção ideal para você.",
-      },
-      categories: [
-        {
-          title: "Retiros de Um Dia",
-          description: "Perfeitos para uma pausa rápida e revigorante",
-          link: "/one-day-retreats",
-        },
-        {
-          title: "Retiros de Bem-estar",
-          description: "Experiências transformadoras de vários dias",
-          link: "/wellness-retreats",
-        },
-        {
-          title: "Eventos e Experiências",
-          description: "Atividades únicas e workshops especiais",
-          link: "/experiences-events",
-        },
-      ],
-    },
-    Français: {
-      hero: {
-        title: title || "Nos Retraites",
-        subtitle: subtitle || "Découvrez notre gamme de retraites et d'expériences conçues pour votre bien-être",
-      },
-      intro: {
-        title: introTitle || "Trouvez la retraite parfaite pour vous",
-        description: introDescription || "Que vous cherchiez une simple journée de détente, une retraite de plusieurs jours ou une expérience unique à l'autre bout du monde, nous avons l'option idéale pour vous.",
-      },
-      categories: [
-        {
-          title: "Retraites d'Un Jour",
-          description: "Parfaites pour une pause rapide et revigorante",
-          link: "/one-day-retreats",
-        },
-        {
-          title: "Retraites de Bien-être",
-          description: "Expériences transformatrices de plusieurs jours",
-          link: "/wellness-retreats",
-        },
-        {
-          title: "Événements et Expériences",
-          description: "Activités uniques et ateliers spéciaux",
-          link: "/experiences-events",
-        },
-      ],
-    },
-    English: {
-      hero: {
-        title: title || "Our Retreats",
-        subtitle: subtitle || "Discover our range of retreats and experiences designed for your wellbeing",
-      },
-      intro: {
-        title: introTitle || "Find the perfect retreat for you",
-        description: introDescription || "Whether you're looking for a simple day of relaxation, a multi-day retreat or a unique experience on the other side of the world, we have the ideal option for you.",
-      },
-      categories: [
-        {
-          title: "One Day Retreats",
-          description: "Perfect for a quick and invigorating break",
-          link: "/one-day-retreats",
-        },
-        {
-          title: "Wellness Retreats",
-          description: "Transformative multi-day experiences",
-          link: "/experiences-events",
-        },
-        {
-          title: "Events & Experiences",
-          description: "Unique activities and special workshops",
-          link: "/experiences-events",
-        },
-      ],
-    },
-  };
-
-  const currentContent = content[language as keyof typeof content] || content.Português;
+  console.log("Data reçue:", data);
+  console.log("Loading:", isLoading);
+  console.log("Error:", error);
 
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -161,68 +25,273 @@ const NosRetraites: React.FC<NosRetraitesProps> = ({ language }) => {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-red-600 text-center">
-          <h2 className="text-2xl font-bold mb-4">Erro ao carregar</h2>
-          <p>Não foi possível carregar o conteúdo. Tente novamente mais tarde.</p>
-        </div>
+        <div className="text-red-600 text-xl">Erreur lors du chargement des données</div>
       </div>
     );
   }
 
+  const retreatData = data as any;
+
+  // Fonction pour construire l'URL de l'image Sanity
+  const getImageUrl = (image: any) => {
+    if (!image) return '';
+    const projectId = import.meta.env.VITE_SANITY_PROJECT_ID;
+    const dataset = import.meta.env.VITE_SANITY_DATASET;
+    return `https://cdn.sanity.io/images/${projectId}/${dataset}/${image.asset._ref.replace('image-', '').replace('-jpg', '.jpg').replace('-png', '.png')}`;
+  };
+
+  // Fonction pour obtenir le contenu dans la langue actuelle (FR par défaut)
+  const getContent = (obj: any, lang: string = 'fr') => {
+    return obj?.[lang] || obj?.fr || 'Contenu non disponible';
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            {currentContent.hero.title}
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            {currentContent.hero.subtitle}
-          </p>
-        </div>
-      </section>
-
-      {/* Introduction Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            {currentContent.intro.title}
-          </h2>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            {currentContent.intro.description}
-          </p>
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {currentContent.categories.map((category, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
-              >
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    {category.title}
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {category.description}
-                  </p>
-                  <a
-                    href={category.link}
-                    className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300"
-                  >
-                    {language === 'Français' ? 'Découvrir' : language === 'English' ? 'Discover' : 'Descobrir'}
-                  </a>
-                </div>
-              </div>
-            ))}
+    <div className="min-h-screen bg-gray-50">
+      {/* Section Bannière */}
+      {retreatData?.banniere && (
+        <div className="relative h-96 bg-cover bg-center bg-no-repeat" 
+             style={{ backgroundImage: `url(${getImageUrl(retreatData.banniere.image)})` }}>
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+          <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
+            <h1 className="text-5xl font-bold mb-4">
+              {getContent(retreatData.banniere.titre)}
+            </h1>
+            <p className="text-xl max-w-3xl">
+              {getContent(retreatData.banniere.sousTitre)}
+            </p>
           </div>
         </div>
-      </section>
+      )}
+
+      {/* Section Introduction */}
+      {retreatData?.introduction && (
+        <div className="py-16 px-4 bg-white">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">
+              {getContent(retreatData.introduction.titre)}
+            </h2>
+            <p className="text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto">
+              {getContent(retreatData.introduction.description)}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Section 1: Expérience d'une journée */}
+      {retreatData?.experienceUneJournee && (
+        <div className="py-16 px-4 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="text-3xl font-bold text-gray-800 mb-6">
+                  {getContent(retreatData.experienceUneJournee.titre)}
+                </h3>
+                <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                  {getContent(retreatData.experienceUneJournee.description)}
+                </p>
+                
+                {retreatData.experienceUneJournee.retraites && (
+                  <div className="space-y-4">
+                    {retreatData.experienceUneJournee.retraites.map((retraite: any, index: number) => (
+                      <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+                        <h4 className="text-xl font-semibold text-gray-800 mb-2">
+                          {getContent(retraite.titre)}
+                        </h4>
+                        <div className="flex items-center space-x-4 text-gray-600">
+                          <span className="flex items-center">
+                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                            </svg>
+                            {getContent(retraite.duree)}
+                          </span>
+                          <span className="flex items-center">
+                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                            </svg>
+                            {getContent(retraite.lieu)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {retreatData.experienceUneJournee.image && (
+                <div className="relative">
+                  <img 
+                    src={getImageUrl(retreatData.experienceUneJournee.image)}
+                    alt={getContent(retreatData.experienceUneJournee.titre)}
+                    className="w-full h-96 object-cover rounded-lg shadow-lg"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Section 2: Retraite bien-être 3/4 jours */}
+      {retreatData?.retraiteBienEtre && (
+        <div className="py-16 px-4 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {retreatData.retraiteBienEtre.image && (
+                <div className="relative order-2 lg:order-1">
+                  <img 
+                    src={getImageUrl(retreatData.retraiteBienEtre.image)}
+                    alt={getContent(retreatData.retraiteBienEtre.titre)}
+                    className="w-full h-96 object-cover rounded-lg shadow-lg"
+                  />
+                </div>
+              )}
+              
+              <div className="order-1 lg:order-2">
+                <h3 className="text-3xl font-bold text-gray-800 mb-6">
+                  {getContent(retreatData.retraiteBienEtre.titre)}
+                </h3>
+                <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                  {getContent(retreatData.retraiteBienEtre.description)}
+                </p>
+                
+                {retreatData.retraiteBienEtre.retraites && (
+                  <div className="space-y-4">
+                    {retreatData.retraiteBienEtre.retraites.map((retraite: any, index: number) => (
+                      <div key={index} className="bg-gray-50 p-6 rounded-lg">
+                        <h4 className="text-xl font-semibold text-gray-800 mb-2">
+                          {getContent(retraite.titre)}
+                        </h4>
+                        <div className="flex items-center space-x-4 text-gray-600">
+                          <span className="flex items-center">
+                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                            </svg>
+                            {getContent(retraite.duree)}
+                          </span>
+                          <span className="flex items-center">
+                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                            </svg>
+                            {getContent(retraite.lieu)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Section 3: Expérience & Events unique4world */}
+      {retreatData?.experienceEvents && (
+        <div className="py-16 px-4 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="text-3xl font-bold text-gray-800 mb-6">
+                  {getContent(retreatData.experienceEvents.titre)}
+                </h3>
+                <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                  {getContent(retreatData.experienceEvents.description)}
+                </p>
+                
+                {retreatData.experienceEvents.retraites && (
+                  <div className="space-y-4">
+                    {retreatData.experienceEvents.retraites.map((experience: any, index: number) => (
+                      <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+                        <h4 className="text-xl font-semibold text-gray-800 mb-2">
+                          {getContent(experience.titre)}
+                        </h4>
+                        <div className="flex items-center space-x-4 text-gray-600">
+                          <span className="flex items-center">
+                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                            </svg>
+                            {getContent(experience.duree)}
+                          </span>
+                          <span className="flex items-center">
+                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                            </svg>
+                            {getContent(experience.lieu)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {retreatData.experienceEvents.image && (
+                <div className="relative">
+                  <img 
+                    src={getImageUrl(retreatData.experienceEvents.image)}
+                    alt={getContent(retreatData.experienceEvents.titre)}
+                    className="w-full h-96 object-cover rounded-lg shadow-lg"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Section 4: Autre événement en préparation */}
+      {retreatData?.autreEvenement && (
+        <div className="py-16 px-4 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {retreatData.autreEvenement.image && (
+                <div className="relative order-2 lg:order-1">
+                  <img 
+                    src={getImageUrl(retreatData.autreEvenement.image)}
+                    alt={getContent(retreatData.autreEvenement.titre)}
+                    className="w-full h-96 object-cover rounded-lg shadow-lg"
+                  />
+                </div>
+              )}
+              
+              <div className="order-1 lg:order-2">
+                <h3 className="text-3xl font-bold text-gray-800 mb-6">
+                  {getContent(retreatData.autreEvenement.titre)}
+                </h3>
+                <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                  {getContent(retreatData.autreEvenement.description)}
+                </p>
+                
+                {retreatData.autreEvenement.retraites && (
+                  <div className="space-y-4">
+                    {retreatData.autreEvenement.retraites.map((evenement: any, index: number) => (
+                      <div key={index} className="bg-gray-50 p-6 rounded-lg">
+                        <h4 className="text-xl font-semibold text-gray-800 mb-2">
+                          {getContent(evenement.titre)}
+                        </h4>
+                        <div className="flex items-center space-x-4 text-gray-600">
+                          <span className="flex items-center">
+                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                            </svg>
+                            {getContent(evenement.duree)}
+                          </span>
+                          <span className="flex items-center">
+                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                            </svg>
+                            {getContent(evenement.lieu)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

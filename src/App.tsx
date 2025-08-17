@@ -29,6 +29,8 @@ import "./index.css";
 import Loader from "./components/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DebugNosRetraites from "./components/DebugNosRetraites";
+
 
 const Studio = () => {
   useEffect(() => {
@@ -67,6 +69,7 @@ const HomePage: React.FC<{ language: string }> = ({ language }) => {
         testimonialsPT={typedData?.testimonialsPT || []}
       />
       <CreateRetreat language={language} imgUrl={typedData?.ctaSectionImg} />
+      <DebugNosRetraites />
       <Blog language={language} />
       <Newsletter language={language} />
     </>
@@ -96,7 +99,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<HomePage language={language} />} />
           <Route path="/retreats" element={<Retreats language={language} />} />
-          <Route path="/nos-retraites" element={<NosRetraites language={language} />} />
+          <Route path="/nos-retraites" element={<NosRetraites />} />
           <Route path="/studio" element={<Studio />} />
           <Route
             path="/one-day-retreats"

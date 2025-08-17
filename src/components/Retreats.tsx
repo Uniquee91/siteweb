@@ -3,8 +3,8 @@ import { useScrollToTop } from "../hooks/useScrollToTop";
 import { Clock, MapPin, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import imgSrc from "../images/img1.jpg";
-import { useFetch } from "../hooks/useFetch";
-import { nosRetraitesQuery } from "../utils/sanityQueries";
+import { useFetch } from '../hooks/useFetch';
+import { nosRetraitesQuery, nosRetraitesDebugQuery } from '../utils/sanityQueries';
 interface RetreatsProps {
   language: string;
 }
@@ -12,47 +12,84 @@ interface RetreatsProps {
 const Retreats: React.FC<RetreatsProps> = ({ language }) => {
   useScrollToTop();
   
+  // DEBUG: Ajout de logs pour voir ce qui se passe
+  console.log("🚀 COMPOSANT RETREATS CHARGÉ !");
+  console.log("Langue:", language);
+  
   const { data: sanityData } = useFetch(nosRetraitesQuery);
 
+  // DEBUG: Log des données Sanity
+  console.log("=== RETREATS DEBUG ===");
+  console.log("Données Sanity reçues:", sanityData);
+  const typedSanityData = sanityData as any;
+  console.log("experienceUneJournee existe:", typedSanityData?.experienceUneJournee ? 'OUI' : 'NON');
+  console.log("retraiteBienEtre existe:", typedSanityData?.retraiteBienEtre ? 'OUI' : 'NON');
+  console.log("experienceEvents existe:", typedSanityData?.experienceEvents ? 'OUI' : 'NON');
+  console.log("autreEvenement existe:", typedSanityData?.autreEvenement ? 'OUI' : 'NON');
+  
+  // DEBUG: Logs détaillés pour le rendu
+  console.log("=== RENDU DEBUG ===");
+  console.log("typedSanityData?.experienceUneJournee:", typedSanityData?.experienceUneJournee);
+  console.log("typedSanityData?.retraiteBienEtre:", typedSanityData?.retraiteBienEtre);
+  console.log("typedSanityData?.experienceEvents:", typedSanityData?.experienceEvents);
+  console.log("typedSanityData?.autreEvenement:", typedSanityData?.autreEvenement);
+  
+  // DEBUG: Structure complète des données
+  console.log("=== STRUCTURE COMPLÈTE ===");
+  console.log("Clés disponibles dans typedSanityData:", Object.keys(typedSanityData || {}));
+  console.log("Structure complète:", JSON.stringify(typedSanityData, null, 2));
+  
+  // Utiliser directement les vraies données Sanity
+  const finalData = typedSanityData;
+  
+  // DEBUG: Vérifier la structure exacte des données
+  console.log("=== DEBUG STRUCTURE SANITY ===");
+  console.log("finalData complet:", finalData);
+  console.log("finalData keys:", finalData ? Object.keys(finalData) : "null");
+  console.log("finalData.experienceUneJournee:", finalData?.experienceUneJournee);
+  console.log("finalData.retraiteBienEtre:", finalData?.retraiteBienEtre);
+  console.log("finalData.experienceEvents:", finalData?.experienceEvents);
+  console.log("finalData.autreEvenement:", finalData?.autreEvenement);
+
   const getSanityTitle = () => {
-    if (sanityData?.banniere?.titre) {
+    if (finalData?.banniere?.titre) {
       switch (language) {
-        case 'Français': return sanityData.banniere.titre.fr;
-        case 'English': return sanityData.banniere.titre.en;
-        case 'Português': default: return sanityData.banniere.titre.pt;
+        case 'Français': return finalData.banniere.titre.fr;
+        case 'English': return finalData.banniere.titre.en;
+        case 'Português': default: return finalData.banniere.titre.pt;
       }
     }
     return '';
   };
 
   const getSanitySubtitle = () => {
-    if (sanityData?.banniere?.sousTitre) {
+    if (finalData?.banniere?.sousTitre) {
       switch (language) {
-        case 'Français': return sanityData.banniere.sousTitre.fr;
-        case 'English': return sanityData.banniere.sousTitre.en;
-        case 'Português': default: return sanityData.banniere.sousTitre.pt;
+        case 'Français': return finalData.banniere.sousTitre.fr;
+        case 'English': return finalData.banniere.sousTitre.en;
+        case 'Português': default: return finalData.banniere.sousTitre.pt;
       }
     }
     return '';
   };
 
   const getSanityIntroTitle = () => {
-    if (sanityData?.introduction?.titre) {
+    if (finalData?.introduction?.titre) {
       switch (language) {
-        case 'Français': return sanityData.introduction.titre.fr;
-        case 'English': return sanityData.introduction.titre.en;
-        case 'Português': default: return sanityData.introduction.titre.pt;
+        case 'Français': return finalData.introduction.titre.fr;
+        case 'English': return finalData.introduction.titre.en;
+        case 'Português': default: return finalData.introduction.titre.pt;
       }
     }
     return '';
   };
 
   const getSanityIntroDescription = () => {
-    if (sanityData?.introduction?.description) {
+    if (finalData?.introduction?.description) {
       switch (language) {
-        case 'Français': return sanityData.introduction.description.fr;
-        case 'English': return sanityData.introduction.description.en;
-        case 'Português': default: return sanityData.introduction.description.pt;
+        case 'Français': return finalData.introduction.description.fr;
+        case 'English': return finalData.introduction.description.en;
+        case 'Português': default: return finalData.introduction.description.pt;
       }
     }
     return '';
@@ -62,6 +99,37 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
   const sanitySubtitle = getSanitySubtitle();
   const sanityIntroTitle = getSanityIntroTitle();
   const sanityIntroDescription = getSanityIntroDescription();
+
+  // NOUVELLES FONCTIONS pour les 4 sections de retraites
+  const getSectionContent = (sectionKey: string, field: string) => {
+    if (typedSanityData?.[sectionKey]?.[field]) {
+      switch (language) {
+        case 'Français': return typedSanityData[sectionKey][field].fr;
+        case 'English': return typedSanityData[sectionKey][field].en;
+        case 'Português': default: return typedSanityData[sectionKey][field].pt;
+      }
+    }
+    return '';
+  };
+
+  const getRetraiteContent = (sectionKey: string, retraiteIndex: number, field: string) => {
+    if (typedSanityData?.[sectionKey]?.retraites?.[retraiteIndex]?.[field]) {
+      switch (language) {
+        case 'Français': return typedSanityData[sectionKey].retraites[retraiteIndex][field].fr;
+        case 'English': return typedSanityData[sectionKey].retraites[retraiteIndex][field].en;
+        case 'Português': default: return typedSanityData[sectionKey].retraites[retraiteIndex][field].pt;
+      }
+    }
+    return '';
+  };
+
+  const getSectionImage = (sectionKey: string) => {
+    if (!typedSanityData?.[sectionKey]?.image) return '';
+    const projectId = import.meta.env.VITE_SANITY_PROJECT_ID;
+    const dataset = import.meta.env.VITE_SANITY_DATASET;
+    const imageRef = typedSanityData[sectionKey].image.asset._ref;
+    return `https://cdn.sanity.io/images/${projectId}/${dataset}/${imageRef.replace('image-', '').replace('-jpg', '.jpg').replace('-png', '.png')}`;
+  };
 
   const content = {
     Português: {
@@ -100,7 +168,7 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
         button: "Descobrir estes retiros",
         retreats: [
           {
-            title: "Retiro bem-estar no coração da natureza",
+            title: "Retiro bem-être no coração da natureza",
             duration: "3 dias",
             location: "Alentejo, Portugal",
             link: "Saber mais",
@@ -404,95 +472,247 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
           <p className="text-gray-600">{intro.description}</p>
         </div>
 
-        {/* One Day Retreats */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
-          <div>
-            <img
-              src="https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg"
-              alt="One day retreats"
-              className="rounded-lg shadow-lg object-cover h-[400px] w-full"
-            />
+        {/* Section 1: Expérience d'une journée - DYNAMIQUE SANITY */}
+        {(() => {
+          console.log("🎯 Section 1 - Condition:", !!finalData?.experienceUneJournee);
+          return finalData?.experienceUneJournee;
+        })() && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
+            <div>
+              <img
+                src={getSectionImage('experienceUneJournee') || "https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg"}
+                alt={getSectionContent('experienceUneJournee', 'titre')}
+                className="rounded-lg shadow-lg object-cover h-[400px] w-full"
+              />
+            </div>
+            <div>
+              <h3 className="text-3xl font-serif mb-4">
+                {getSectionContent('experienceUneJournee', 'titre') || oneDayRetreats.title}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {getSectionContent('experienceUneJournee', 'description') || oneDayRetreats.description}
+              </p>
+              
+                              {/* Liste des retraites dynamiques */}
+                {finalData.experienceUneJournee.retraites && finalData.experienceUneJournee.retraites.length > 0 ? (
+                  <div className="space-y-4 mb-6">
+                    {finalData.experienceUneJournee.retraites.map((retraite: any, index: number) => (
+                      <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                        <h4 className="font-semibold text-gray-800 mb-2">
+                          {retraite.titre[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                        </h4>
+                        <div className="flex items-center space-x-4 text-sm text-gray-600">
+                          <span className="flex items-center">
+                            <Clock className="w-4 h-4 mr-2" />
+                            {retraite.duree[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                          </span>
+                          <span className="flex items-center">
+                            <MapPin className="w-4 h-4 mr-2" />
+                            {retraite.lieu[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-4 mb-6">
+                    {oneDayRetreats.retreats.map((retreat, index) => (
+                      <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                        <h4 className="font-semibold text-gray-800 mb-2">
+                          {retreat.title}
+                        </h4>
+                        <div className="flex items-center space-x-4 text-sm text-gray-600">
+                          <span className="flex items-center">
+                            <Clock className="w-4 h-4 mr-2" />
+                            {retreat.duration}
+                          </span>
+                          <span className="flex items-center">
+                            <MapPin className="w-4 h-4 mr-2" />
+                            {retreat.location}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              
+              <Link
+                to="/one-day-retreats"
+                className="inline-block mt-8 px-6 py-3 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
+              >
+                {oneDayRetreats.button}
+              </Link>
+            </div>
           </div>
-          <div>
-            <h3 className="text-3xl font-serif mb-4">{oneDayRetreats.title}</h3>
-            <p className="text-gray-600 mb-6">{oneDayRetreats.description}</p>
-            <RetreatList retreats={oneDayRetreats.retreats} />
-            <Link
-              to="/one-day-retreats"
-              className="inline-block mt-8 px-6 py-3 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
-            >
-              {oneDayRetreats.button}
-            </Link>
-          </div>
-        </div>
+        )}
 
-        {/* Wellness Retreats */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
-          <div className="order-2 lg:order-1">
-            <h3 className="text-3xl font-serif mb-4">
-              {wellnessRetreats.title}
-            </h3>
-            <p className="text-gray-600 mb-6">{wellnessRetreats.description}</p>
-            <RetreatList retreats={wellnessRetreats.retreats} />
-            <Link
-              to="/wellness-retreats"
-              className="inline-block mt-8 px-6 py-3 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
-            >
-              {wellnessRetreats.button}
-            </Link>
+        {/* Section 2: Retraite bien-être 3/4 jours - DYNAMIQUE SANITY */}
+        {(() => {
+          console.log("🎯 Section 2 - Condition:", !!finalData?.retraiteBienEtre);
+          return finalData?.retraiteBienEtre;
+        })() && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
+            <div className="order-2 lg:order-1">
+              <h3 className="text-3xl font-serif mb-4">
+                {getSectionContent('retraiteBienEtre', 'titre') || wellnessRetreats.title}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {getSectionContent('retraiteBienEtre', 'description') || wellnessRetreats.description}
+              </p>
+              
+              {/* Liste des retraites dynamiques */}
+                              {finalData.retraiteBienEtre.retraites && finalData.retraiteBienEtre.retraites.length > 0 ? (
+                  <div className="space-y-4 mb-6">
+                    {finalData.retraiteBienEtre.retraites.map((retraite: any, index: number) => (
+                    <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-gray-800 mb-2">
+                        {retraite.titre[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                      </h4>
+                      <div className="flex items-center space-x-4 text-sm text-gray-600">
+                        <span className="flex items-center">
+                          <Clock className="w-4 h-4 mr-2" />
+                          {retraite.duree[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                        </span>
+                        <span className="flex items-center">
+                          <MapPin className="w-4 h-4 mr-2" />
+                          {retraite.lieu[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <RetreatList retreats={wellnessRetreats.retreats} />
+              )}
+              
+              <Link
+                to="/wellness-retreats"
+                className="inline-block mt-8 px-6 py-3 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
+              >
+                {wellnessRetreats.button}
+              </Link>
+            </div>
+            <div className="order-1 lg:order-2">
+              <img
+                src={getSectionImage('retraiteBienEtre') || "https://images.pexels.com/photos/8436461/pexels-photo-8436461.jpeg"}
+                alt={getSectionContent('retraiteBienEtre', 'titre')}
+                className="rounded-lg shadow-lg object-cover h-[400px] w-full"
+              />
+            </div>
           </div>
-          <div className="order-1 lg:order-2">
-            <img
-              src="https://images.pexels.com/photos/8436461/pexels-photo-8436461.jpeg"
-              alt="Wellness retreats"
-              className="rounded-lg shadow-lg object-cover h-[400px] w-full"
-            />
-          </div>
-        </div>
+        )}
 
-        {/* Experiences & Events */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
-          <div>
-            <img
-              src="https://images.pexels.com/photos/3094230/pexels-photo-3094230.jpeg"
-              alt="Experiences and events"
-              className="rounded-lg shadow-lg object-cover h-[400px] w-full"
-            />
+        {/* Section 3: Expérience & Events unique4world - DYNAMIQUE SANITY */}
+        {(() => {
+          console.log("🎯 Section 3 - Condition:", !!finalData?.experienceEvents);
+          return finalData?.experienceEvents;
+        })() && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
+            <div>
+              <img
+                src={getSectionImage('experienceEvents') || "https://images.pexels.com/photos/3094230/pexels-photo-3094230.jpeg"}
+                alt={getSectionContent('experienceEvents', 'titre')}
+                className="rounded-lg shadow-lg object-cover h-[400px] w-full"
+              />
+            </div>
+            <div>
+              <h3 className="text-3xl font-serif mb-4">
+                {getSectionContent('experienceEvents', 'titre') || experiences.title}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {getSectionContent('experienceEvents', 'description') || experiences.description}
+              </p>
+              
+              {/* Liste des expériences dynamiques */}
+                              {finalData.experienceEvents.retraites && finalData.experienceEvents.retraites.length > 0 ? (
+                  <div className="space-y-4 mb-6">
+                    {finalData.experienceEvents.retraites.map((experience: any, index: number) => (
+                    <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-gray-800 mb-2">
+                        {experience.titre[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                      </h4>
+                      <div className="flex items-center space-x-4 text-sm text-gray-600">
+                        <span className="flex items-center">
+                          <Clock className="w-4 h-4 mr-2" />
+                          {experience.duree[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                        </span>
+                        <span className="flex items-center">
+                          <MapPin className="w-4 h-4 mr-2" />
+                          {experience.lieu[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <RetreatList retreats={experiences.retreats} />
+              )}
+              
+              <Link
+                to="/experiences-events"
+                className="inline-block mt-8 px-6 py-3 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
+              >
+                {experiences.button}
+              </Link>
+            </div>
           </div>
-          <div>
-            <h3 className="text-3xl font-serif mb-4">{experiences.title}</h3>
-            <p className="text-gray-600 mb-6">{experiences.description}</p>
-            <RetreatList retreats={experiences.retreats} />
-            <Link
-              to="/experiences-events"
-              className="inline-block mt-8 px-6 py-3 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
-            >
-              {experiences.button}
-            </Link>
-          </div>
-        </div>
+        )}
 
-        {/* Upcoming Events */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="order-2 lg:order-1">
-            <h3 className="text-3xl font-serif mb-4">{upcoming.title}</h3>
-            <p className="text-gray-600 mb-6">{upcoming.description}</p>
-            <RetreatList retreats={upcoming.retreats} />
-            <Link
-              to="/upcoming-events"
-              className="inline-block mt-8 px-6 py-3 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
-            >
-              {upcoming.button}
-            </Link>
+        {/* Section 4: Autre événement en préparation - DYNAMIQUE SANITY */}
+        {(() => {
+          console.log("🎯 Section 4 - Condition:", !!finalData?.autreEvenement);
+          return finalData?.autreEvenement;
+        })() && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1">
+              <h3 className="text-3xl font-serif mb-4">
+                {getSectionContent('autreEvenement', 'titre') || upcoming.title}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {getSectionContent('autreEvenement', 'description') || upcoming.description}
+              </p>
+              
+              {/* Liste des événements dynamiques */}
+                              {finalData.autreEvenement.retraites && finalData.autreEvenement.retraites.length > 0 ? (
+                  <div className="space-y-4 mb-6">
+                    {finalData.autreEvenement.retraites.map((evenement: any, index: number) => (
+                    <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-gray-800 mb-2">
+                        {evenement.titre[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                      </h4>
+                      <div className="flex items-center space-x-4 text-sm text-gray-600">
+                        <span className="flex items-center">
+                          <Clock className="w-4 h-4 mr-2" />
+                          {evenement.duree[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                        </span>
+                        <span className="flex items-center">
+                          <MapPin className="w-4 h-4 mr-2" />
+                          {evenement.lieu[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <RetreatList retreats={upcoming.retreats} />
+              )}
+              
+              <Link
+                to="/upcoming-events"
+                className="inline-block mt-8 px-6 py-3 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
+              >
+                {upcoming.button}
+              </Link>
+            </div>
+            <div className="order-1 lg:order-2">
+              <img
+                src={getSectionImage('autreEvenement') || imgSrc}
+                alt={getSectionContent('autreEvenement', 'titre')}
+                className="rounded-lg shadow-lg object-cover h-[400px] w-full"
+              />
+            </div>
           </div>
-          <div className="order-1 lg:order-2">
-            <img
-              src={imgSrc}
-              alt="Upcoming events"
-              className="rounded-lg shadow-lg object-cover h-[400px] w-full"
-            />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
