@@ -29,7 +29,6 @@ import "./index.css";
 import Loader from "./components/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DebugNosRetraites from "./components/DebugNosRetraites";
 
 
 const Studio = () => {
@@ -69,7 +68,6 @@ const HomePage: React.FC<{ language: string }> = ({ language }) => {
         testimonialsPT={typedData?.testimonialsPT || []}
       />
       <CreateRetreat language={language} imgUrl={typedData?.ctaSectionImg} />
-      <DebugNosRetraites />
       <Blog language={language} />
       <Newsletter language={language} />
     </>

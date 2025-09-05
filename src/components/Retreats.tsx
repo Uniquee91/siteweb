@@ -1,10 +1,10 @@
 import React from "react";
 import { useScrollToTop } from "../hooks/useScrollToTop";
-import { Clock, MapPin, ArrowRight } from "lucide-react";
+import { Clock, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import imgSrc from "../images/img1.jpg";
 import { useFetch } from '../hooks/useFetch';
-import { nosRetraitesQuery, nosRetraitesDebugQuery } from '../utils/sanityQueries';
+import { nosRetraitesQuery } from '../utils/sanityQueries';
 interface RetreatsProps {
   language: string;
 }
@@ -12,84 +12,48 @@ interface RetreatsProps {
 const Retreats: React.FC<RetreatsProps> = ({ language }) => {
   useScrollToTop();
   
-  // DEBUG: Ajout de logs pour voir ce qui se passe
-  console.log("🚀 COMPOSANT RETREATS CHARGÉ !");
-  console.log("Langue:", language);
-  
   const { data: sanityData } = useFetch(nosRetraitesQuery);
-
-  // DEBUG: Log des données Sanity
-  console.log("=== RETREATS DEBUG ===");
-  console.log("Données Sanity reçues:", sanityData);
   const typedSanityData = sanityData as any;
-  console.log("experienceUneJournee existe:", typedSanityData?.experienceUneJournee ? 'OUI' : 'NON');
-  console.log("retraiteBienEtre existe:", typedSanityData?.retraiteBienEtre ? 'OUI' : 'NON');
-  console.log("experienceEvents existe:", typedSanityData?.experienceEvents ? 'OUI' : 'NON');
-  console.log("autreEvenement existe:", typedSanityData?.autreEvenement ? 'OUI' : 'NON');
-  
-  // DEBUG: Logs détaillés pour le rendu
-  console.log("=== RENDU DEBUG ===");
-  console.log("typedSanityData?.experienceUneJournee:", typedSanityData?.experienceUneJournee);
-  console.log("typedSanityData?.retraiteBienEtre:", typedSanityData?.retraiteBienEtre);
-  console.log("typedSanityData?.experienceEvents:", typedSanityData?.experienceEvents);
-  console.log("typedSanityData?.autreEvenement:", typedSanityData?.autreEvenement);
-  
-  // DEBUG: Structure complète des données
-  console.log("=== STRUCTURE COMPLÈTE ===");
-  console.log("Clés disponibles dans typedSanityData:", Object.keys(typedSanityData || {}));
-  console.log("Structure complète:", JSON.stringify(typedSanityData, null, 2));
-  
-  // Utiliser directement les vraies données Sanity
-  const finalData = typedSanityData;
-  
-  // DEBUG: Vérifier la structure exacte des données
-  console.log("=== DEBUG STRUCTURE SANITY ===");
-  console.log("finalData complet:", finalData);
-  console.log("finalData keys:", finalData ? Object.keys(finalData) : "null");
-  console.log("finalData.experienceUneJournee:", finalData?.experienceUneJournee);
-  console.log("finalData.retraiteBienEtre:", finalData?.retraiteBienEtre);
-  console.log("finalData.experienceEvents:", finalData?.experienceEvents);
-  console.log("finalData.autreEvenement:", finalData?.autreEvenement);
 
   const getSanityTitle = () => {
-    if (finalData?.banniere?.titre) {
+    if (typedSanityData?.banniere?.titre) {
       switch (language) {
-        case 'Français': return finalData.banniere.titre.fr;
-        case 'English': return finalData.banniere.titre.en;
-        case 'Português': default: return finalData.banniere.titre.pt;
+        case 'Français': return typedSanityData.banniere.titre.fr;
+        case 'English': return typedSanityData.banniere.titre.en;
+        case 'Português': default: return typedSanityData.banniere.titre.pt;
       }
     }
     return '';
   };
 
   const getSanitySubtitle = () => {
-    if (finalData?.banniere?.sousTitre) {
+    if (typedSanityData?.banniere?.sousTitre) {
       switch (language) {
-        case 'Français': return finalData.banniere.sousTitre.fr;
-        case 'English': return finalData.banniere.sousTitre.en;
-        case 'Português': default: return finalData.banniere.sousTitre.pt;
+        case 'Français': return typedSanityData.banniere.sousTitre.fr;
+        case 'English': return typedSanityData.banniere.sousTitre.en;
+        case 'Português': default: return typedSanityData.banniere.sousTitre.pt;
       }
     }
     return '';
   };
 
   const getSanityIntroTitle = () => {
-    if (finalData?.introduction?.titre) {
+    if (typedSanityData?.introduction?.titre) {
       switch (language) {
-        case 'Français': return finalData.introduction.titre.fr;
-        case 'English': return finalData.introduction.titre.en;
-        case 'Português': default: return finalData.introduction.titre.pt;
+        case 'Français': return typedSanityData.introduction.titre.fr;
+        case 'English': return typedSanityData.introduction.titre.en;
+        case 'Português': default: return typedSanityData.introduction.titre.pt;
       }
     }
     return '';
   };
 
   const getSanityIntroDescription = () => {
-    if (finalData?.introduction?.description) {
+    if (typedSanityData?.introduction?.description) {
       switch (language) {
-        case 'Français': return finalData.introduction.description.fr;
-        case 'English': return finalData.introduction.description.en;
-        case 'Português': default: return finalData.introduction.description.pt;
+        case 'Français': return typedSanityData.introduction.description.fr;
+        case 'English': return typedSanityData.introduction.description.en;
+        case 'Português': default: return typedSanityData.introduction.description.pt;
       }
     }
     return '';
@@ -112,16 +76,6 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
     return '';
   };
 
-  const getRetraiteContent = (sectionKey: string, retraiteIndex: number, field: string) => {
-    if (typedSanityData?.[sectionKey]?.retraites?.[retraiteIndex]?.[field]) {
-      switch (language) {
-        case 'Français': return typedSanityData[sectionKey].retraites[retraiteIndex][field].fr;
-        case 'English': return typedSanityData[sectionKey].retraites[retraiteIndex][field].en;
-        case 'Português': default: return typedSanityData[sectionKey].retraites[retraiteIndex][field].pt;
-      }
-    }
-    return '';
-  };
 
   const getSectionImage = (sectionKey: string) => {
     if (!typedSanityData?.[sectionKey]?.image) return '';
@@ -415,10 +369,8 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
 
   const RetreatList = ({
     retreats,
-    reverse = false,
   }: {
     retreats: any[];
-    reverse?: boolean;
   }) => (
     <div className="space-y-4">
       {retreats.map((retreat, index) => (
@@ -472,11 +424,8 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
           <p className="text-gray-600">{intro.description}</p>
         </div>
 
-        {/* Section 1: Expérience d'une journée - DYNAMIQUE SANITY */}
-        {(() => {
-          console.log("🎯 Section 1 - Condition:", !!finalData?.experienceUneJournee);
-          return finalData?.experienceUneJournee;
-        })() && (
+                            {/* Section 1: Expérience d'une journée - DYNAMIQUE SANITY */}
+                    {typedSanityData?.experienceUneJournee && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
             <div>
               <img
@@ -493,10 +442,10 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
                 {getSectionContent('experienceUneJournee', 'description') || oneDayRetreats.description}
               </p>
               
-                              {/* Liste des retraites dynamiques */}
-                {finalData.experienceUneJournee.retraites && finalData.experienceUneJournee.retraites.length > 0 ? (
-                  <div className="space-y-4 mb-6">
-                    {finalData.experienceUneJournee.retraites.map((retraite: any, index: number) => (
+                                                        {/* Liste des retraites dynamiques */}
+                          {typedSanityData.experienceUneJournee.retraites && typedSanityData.experienceUneJournee.retraites.length > 0 ? (
+                            <div className="space-y-4 mb-6">
+                              {typedSanityData.experienceUneJournee.retraites.map((retraite: any, index: number) => (
                       <div key={index} className="bg-gray-50 p-4 rounded-lg">
                         <h4 className="font-semibold text-gray-800 mb-2">
                           {retraite.titre[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
@@ -546,11 +495,8 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
           </div>
         )}
 
-        {/* Section 2: Retraite bien-être 3/4 jours - DYNAMIQUE SANITY */}
-        {(() => {
-          console.log("🎯 Section 2 - Condition:", !!finalData?.retraiteBienEtre);
-          return finalData?.retraiteBienEtre;
-        })() && (
+                            {/* Section 2: Retraite bien-être 3/4 jours - DYNAMIQUE SANITY */}
+                    {typedSanityData?.retraiteBienEtre && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
             <div className="order-2 lg:order-1">
               <h3 className="text-3xl font-serif mb-4">
@@ -560,10 +506,10 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
                 {getSectionContent('retraiteBienEtre', 'description') || wellnessRetreats.description}
               </p>
               
-              {/* Liste des retraites dynamiques */}
-                              {finalData.retraiteBienEtre.retraites && finalData.retraiteBienEtre.retraites.length > 0 ? (
-                  <div className="space-y-4 mb-6">
-                    {finalData.retraiteBienEtre.retraites.map((retraite: any, index: number) => (
+                                        {/* Liste des retraites dynamiques */}
+                          {typedSanityData.retraiteBienEtre.retraites && typedSanityData.retraiteBienEtre.retraites.length > 0 ? (
+                            <div className="space-y-4 mb-6">
+                              {typedSanityData.retraiteBienEtre.retraites.map((retraite: any, index: number) => (
                     <div key={index} className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-semibold text-gray-800 mb-2">
                         {retraite.titre[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
@@ -602,11 +548,8 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
           </div>
         )}
 
-        {/* Section 3: Expérience & Events unique4world - DYNAMIQUE SANITY */}
-        {(() => {
-          console.log("🎯 Section 3 - Condition:", !!finalData?.experienceEvents);
-          return finalData?.experienceEvents;
-        })() && (
+                            {/* Section 3: Expérience & Events unique4world - DYNAMIQUE SANITY */}
+                    {typedSanityData?.experienceEvents && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
             <div>
               <img
@@ -623,10 +566,10 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
                 {getSectionContent('experienceEvents', 'description') || experiences.description}
               </p>
               
-              {/* Liste des expériences dynamiques */}
-                              {finalData.experienceEvents.retraites && finalData.experienceEvents.retraites.length > 0 ? (
-                  <div className="space-y-4 mb-6">
-                    {finalData.experienceEvents.retraites.map((experience: any, index: number) => (
+                                        {/* Liste des expériences dynamiques */}
+                          {typedSanityData.experienceEvents.retraites && typedSanityData.experienceEvents.retraites.length > 0 ? (
+                            <div className="space-y-4 mb-6">
+                              {typedSanityData.experienceEvents.retraites.map((experience: any, index: number) => (
                     <div key={index} className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-semibold text-gray-800 mb-2">
                         {experience.titre[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
@@ -658,11 +601,8 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
           </div>
         )}
 
-        {/* Section 4: Autre événement en préparation - DYNAMIQUE SANITY */}
-        {(() => {
-          console.log("🎯 Section 4 - Condition:", !!finalData?.autreEvenement);
-          return finalData?.autreEvenement;
-        })() && (
+                            {/* Section 4: Autre événement en préparation - DYNAMIQUE SANITY */}
+                    {typedSanityData?.autreEvenement && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
               <h3 className="text-3xl font-serif mb-4">
@@ -672,10 +612,10 @@ const Retreats: React.FC<RetreatsProps> = ({ language }) => {
                 {getSectionContent('autreEvenement', 'description') || upcoming.description}
               </p>
               
-              {/* Liste des événements dynamiques */}
-                              {finalData.autreEvenement.retraites && finalData.autreEvenement.retraites.length > 0 ? (
-                  <div className="space-y-4 mb-6">
-                    {finalData.autreEvenement.retraites.map((evenement: any, index: number) => (
+                                        {/* Liste des événements dynamiques */}
+                          {typedSanityData.autreEvenement.retraites && typedSanityData.autreEvenement.retraites.length > 0 ? (
+                            <div className="space-y-4 mb-6">
+                              {typedSanityData.autreEvenement.retraites.map((evenement: any, index: number) => (
                     <div key={index} className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-semibold text-gray-800 mb-2">
                         {evenement.titre[language === 'Français' ? 'fr' : language === 'English' ? 'en' : 'pt']}
